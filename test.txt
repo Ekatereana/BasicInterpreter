@@ -1,0 +1,4 @@
+rem ignored
+print "a" goto 10
+3+6 3++ 5 +6
+::::: ; "ddd" .
