@@ -1,7 +1,6 @@
-package main;
+package main.enums;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public enum TokenTypes {
     LINE_END("\n"),
@@ -34,7 +33,7 @@ public enum TokenTypes {
         return token.toString();
     }
 
-    private static final HashMap<String,TokenTypes> map;
+    private static HashMap<String,TokenTypes> map;
     static {
         map = new HashMap<String,TokenTypes>();
         for (TokenTypes v : TokenTypes.values()) {

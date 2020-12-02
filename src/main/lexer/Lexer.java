@@ -1,4 +1,7 @@
-package main;
+package main.lexer;
+
+import main.Token;
+import main.enums.TokenTypes;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,7 +11,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
-import static main.TokenTypes.*;
+import static main.enums.TokenTypes.*;
 
 
 public class Lexer {
@@ -23,7 +26,7 @@ public class Lexer {
         keywords.put(x -> Pattern.matches("-?([1-9][0-9]*)*", x), x -> new Token(INTEGER, x));
         keywords.put(x -> Pattern.matches(
                 "^-?([1-9][0-9]*)[\\.]\\d*||^-?([1-9][0-9]*)[\\.]\\d+", x), x -> new Token(DOUBLE, x));
-        keywords.put(x -> Pattern.matches("\".*\"||\'.*\' ", x), x -> new Token(STRING, x));
+        keywords.put(x -> Pattern.matches("\".*\"||\'.*\'||\".*||.*\"||\'[^ ]*", x), x -> new Token(STRING, x));
         keywords.put(x -> Pattern.matches("rem", x), x-> new Token(COMMENT, x));
         keywords.put(x -> Pattern.matches("print||goto||end||\\+||\\:||\\;", x), x -> new Token(TokenTypes.findByKey(x), x));
         keywords.put(x -> Pattern.matches(
@@ -55,10 +58,14 @@ public class Lexer {
             current = getToken(args[i]);
 
 //            \nprint
-            if (current.getLexeme().equals(COMMENT)){
+            if (current.getLexeme().equals(COMMENT) || current.getLexeme().equals(STRING)){
                 StringBuilder rem = new StringBuilder();
-                while(!Pattern.matches(".*\n.*", args[i])){
+                while(!Pattern.matches(".*\n.*||.*\"||.*\'", args[i])){
                     rem.append(args[i] + " ");
+                    i++;
+                }
+                if(Pattern.matches(".*\"||.*\'", args[i])){
+                    rem.append(args[i]);
                     i++;
                 }
                 current.setValue(rem.toString());
@@ -69,7 +76,7 @@ public class Lexer {
             if (!current.getLexeme().equals(SKIP) && !current.getLexeme().equals(LINE_END)) {
                 rowLexemes.add(current);
             }
-            if(current.getLexeme().equals(LINE_END)){
+            if(current.getLexeme().equals(LINE_END) && !rowLexemes.isEmpty()){
                 lexemes.add(rowLexemes);
                 rowLexemes = new ArrayList<>();
             }

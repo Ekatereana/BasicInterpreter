@@ -1,5 +1,7 @@
 package main;
 
+import main.enums.TokenTypes;
+
 import java.util.Objects;
 
 public class Token {
