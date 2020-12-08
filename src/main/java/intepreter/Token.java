@@ -1,8 +1,8 @@
-package main;
+package intepreter;
 
-import main.enums.TokenTypes;
 
-import java.util.Objects;
+import intepreter.enums.TokenTypes;
+
 
 public class Token {
     private TokenTypes lexeme;
@@ -12,21 +12,6 @@ public class Token {
     public Token(TokenTypes lexeme) {
         this.lexeme = lexeme;
         this.isSkipped = false;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Token token = (Token) o;
-        return isSkipped == token.isSkipped &&
-                lexeme == token.lexeme &&
-                Objects.equals(value, token.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(lexeme, value, isSkipped);
     }
 
     @Override

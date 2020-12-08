@@ -1,8 +1,10 @@
-package main;
+package intepreter;
 
-import main.enums.TreeNodeType;
+import intepreter.enums.TreeNodeType;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.LinkedList;
+
 
 public class STreeNode<T> {
     private int position;
@@ -51,8 +53,8 @@ public class STreeNode<T> {
 
 
     @Override
-    public String toString() {
-        return "\n" +
+    public String toString(){
+        return "\nSTreeNode{" +
                 "position=" + position +
                 ", type=" + type +
                 ",children=" + children +

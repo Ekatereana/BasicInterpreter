@@ -1,8 +1,8 @@
 package test;
 
-import main.lexer.Lexer;
-import main.Token;
-import main.enums.TokenTypes;
+import intepreter.Token;
+import intepreter.enums.TokenTypes;
+import intepreter.lexer.Lexer;
 import org.junit.Assert;
 import org.junit.Test;
 

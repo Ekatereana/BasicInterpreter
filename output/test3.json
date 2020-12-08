@@ -1,0 +1,29 @@
+{
+  "position" : 0,
+  "type" : "ROOT",
+  "children" : [ {
+    "position" : 10,
+    "type" : "PRINT",
+    "children" : [ {
+      "position" : 10,
+      "type" : "INTEGER",
+      "children" : [ "6" ]
+    } ]
+  }, {
+    "position" : 10,
+    "type" : "PRINT",
+    "children" : [ {
+      "position" : 10,
+      "type" : "CONCAT",
+      "children" : [ {
+        "position" : 10,
+        "type" : "STRING",
+        "children" : [ "'ffjffjfj'" ]
+      }, {
+        "position" : 10,
+        "type" : "STRING",
+        "children" : [ "'vvvv'" ]
+      } ]
+    } ]
+  } ]
+}

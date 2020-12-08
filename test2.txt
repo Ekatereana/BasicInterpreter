@@ -10,3 +10,4 @@
 70 goto 11. + 18.5 + .5 rem ignored
 10 print "o" ; "n" ; "e"
 20 print 'a' : goto 60.0 : end
+80 print 'a' ; 'm' ; 't'
