@@ -1,0 +1,4 @@
+11 print 4 + 5.3 : print "b" ; "m"
+13 goto 17
+12 print 12
+17 print "on 17"

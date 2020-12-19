@@ -1,9 +1,8 @@
 package intepreter.parser;
 
 
-
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import intepreter.STreeNode;
 import intepreter.Token;
 import intepreter.enums.TokenTypes;
@@ -13,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -35,17 +35,17 @@ public class Parser {
         keyActions.put(x -> TreeNodeType.findByKey(x.getToken()).isUnary(),
                 Parser.class.getDeclaredMethod("parseLexeme", int.class, int.class, LinkedList.class, Token.class));
         keyActions.put(x -> !TreeNodeType.findByKey(x.getToken()).isUnary()
-                        &&!TreeNodeType.findByKey(x.getToken()).isType(),
+                        && !TreeNodeType.findByKey(x.getToken()).isType() && !x.equals(TokenTypes.COMMENT),
                 Parser.class.getDeclaredMethod("parseOperator", int.class, int.class, LinkedList.class, Token.class));
         keyErrors.put(0, x -> "LineStartFormatException" + AT_POSITION + x);
         keyErrors.put(1, x -> "UnknownTokenFormatException" + AT_POSITION + x);
-        keyErrors.put(2, x -> "Unexpected end of the line. \nIncorrect number or type of args provided" + AT_POSITION + x);
+        keyErrors.put(2, x -> "Unexpected end of the line. \nIncorrect number of args provided" + AT_POSITION + x);
         keyErrors.put(3, x -> "Unexpected end of the line. \nIncorrect type of args provided" + AT_POSITION + x);
 
     }
 
 
-    public String parse(String path, List<ArrayList<Token>> tokens) throws JsonProcessingException {
+    public String parse(String path, List<ArrayList<Token>> tokens) throws IOException {
         STreeNode root = new STreeNode<STreeNode>(0, TreeNodeType.ROOT);
         Iterator<ArrayList<Token>> atIterator = tokens.iterator();
         ListIterator<Token> tIterator;
@@ -53,31 +53,25 @@ public class Parser {
         while (atIterator.hasNext()) {
             line = atIterator.next();
             tIterator = line.listIterator();
-            root.addAll(parseLine(tIterator, path));
+            try {
+                root.addAll(parseLine(tIterator));
+            } catch (Error e) {
+                throw new Error("\nStacker exception in filepath :: " + path + " " + e.getMessage());
+            }
+
 
         }
         ObjectMapper mapper;
         mapper = new ObjectMapper();
-        String result = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
-        writeToFile(path,result);
+        String[] spited = path.split("/");
+        String filename = "output/" + spited[spited.length - 1].split("\\.")[0] + ".json";
+        mapper.writerWithDefaultPrettyPrinter().writeValue(Paths.get(filename).toFile(), root);
 
-        return result;
+        return filename;
     }
 
 
-    public void writeToFile(String path, String result) {
-        try {
-            FileWriter writer = new FileWriter("output/" + path.split("\\.")[0] + ".json", false);
-            writer.write(result);
-            writer.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-
-    }
-
-    private LinkedList<STreeNode> parseLine(ListIterator<Token> tIterator, String path) {
+    private LinkedList<STreeNode> parseLine(ListIterator<Token> tIterator) throws Error {
         LinkedList<STreeNode> children = new LinkedList<>();
         LinkedList<Token> buffer = new LinkedList<>();
         int line;
@@ -88,14 +82,14 @@ public class Parser {
             while (tIterator.hasNext()) {
                 currentToken = tIterator.next();
                 if (currentToken.getLexeme().equals(TokenTypes.IS)) {
-                    children.add(parseExpression(line, offset, buffer, null, 1));
+                    children.add(parseExpression(line, offset, buffer, null, currentToken.getLexeme().getAfter()));
                     buffer.clear();
                 } else {
                     buffer.add(currentToken);
                 }
                 offset++;
                 if (!tIterator.hasNext()) {
-                    children.add(parseExpression(line, offset, buffer, null,1));
+                    children.add(parseExpression(line, offset, buffer, null, currentToken.getLexeme().getAfter()));
                 }
 
             }
@@ -107,7 +101,8 @@ public class Parser {
         return children;
     }
 
-    private STreeNode parseExpression(int line, int offset, LinkedList<Token> buffer, Token isPart, int count) {
+    private STreeNode parseExpression(int line, int offset, LinkedList<Token> buffer, Token isPart, int count)
+            throws Error {
         int position = offset;
         STreeNode result = null;
         try {
@@ -132,47 +127,46 @@ public class Parser {
     }
 
 
-    private STreeNode parseLexeme(int position, int offset, LinkedList<Token> buffer, Token parent) {
+    private STreeNode parseLexeme(int position, int offset, LinkedList<Token> buffer, Token parent) throws Error {
         STreeNode<STreeNode> result = new STreeNode<>(position, TreeNodeType.findByKey(parent.getLexeme().getToken()));
-        result.addChild(parseExpression(position, ++offset, buffer, parent, 1 ));
+        result.addChild(parseExpression(position, ++offset, buffer, parent, parent.getLexeme().getAfter()));
         return result;
     }
 
     private void isWaitingFor(Token parent, List<Token> actual, int line, int position, int count) {
-        if (parent == null){
+        if (parent == null) {
             return;
         }
-        try{
-
-        List<TokenTypes> isAllowed = parent.getLexeme().getIsAllowed();
-            for (int i = 0; i < count ; i++) {
-                if (!isAllowed.contains(actual.get(i).getLexeme())){
+        try {
+            List<TokenTypes> isAllowed = parent.getLexeme().getIsAllowed();
+            for (int i = 0; i < count; i++) {
+                if (!isAllowed.contains(actual.get(i).getLexeme())) {
                     String errors = EXPECTED.get(0) + isAllowed.toString() + EXPECTED.get(1) + actual.get(i);
-                    throw new Error(keyErrors.get(3).apply(line + "::" + position + " at function " + parent + errors ));
+                    throw new Error(keyErrors.get(3).apply(line + "::" + position + " at function " + parent + errors));
                 }
             }
 
-        } catch (NullPointerException | IndexOutOfBoundsException e){
+        } catch (NullPointerException | IndexOutOfBoundsException e) {
             throw new Error(keyErrors.get(2).apply(line + "::" + position + " at function " + parent));
         }
     }
 
 
-    private STreeNode parseNoEntry(int position, int offset, LinkedList<Token> buffer, Token parent) {
+    private STreeNode parseNoEntry(int position, int offset, LinkedList<Token> buffer, Token parent) throws Error {
         STreeNode<String> result = new STreeNode<>(position, TreeNodeType.findByKey(parent.getLexeme().getToken()));
         result.addChild(parent.getValue());
         if (!buffer.isEmpty()) throw new Error(keyErrors.get(1).apply(position + "::" + offset));
         return result;
     }
 
-    private STreeNode parseOperator(int position, int offset, LinkedList<Token> buffer, Token parent) {
+    private STreeNode parseOperator(int position, int offset, LinkedList<Token> buffer, Token parent) throws Error {
         STreeNode<STreeNode> result = new STreeNode<>(position, TreeNodeType.findByKey(parent.getLexeme().getToken()));
         List<TokenTypes> allowed = parent.getLexeme().getIsAllowed();
         Token actual;
-        while (!buffer.isEmpty() && (allowed.contains(buffer.peek().getLexeme()) || buffer.peek().equals(parent))){
+        while (!buffer.isEmpty() && (allowed.contains(buffer.peek().getLexeme()) || buffer.peek().equals(parent))) {
             actual = buffer.poll();
-            if (actual.equals(parent)){
-                isWaitingFor(parent, buffer, position, ++offset, 1);
+            if (actual.equals(parent)) {
+                isWaitingFor(parent, buffer, position, ++offset, parent.getLexeme().getAfter());
                 actual = buffer.poll();
                 result.addChild(parseArgument(position, offset, buffer, actual));
             } else {
@@ -181,18 +175,18 @@ public class Parser {
 
 
         }
-        if(result.getChildren().size() < 2) {
+        if (result.getChildren().size() < parent.getLexeme().getAfter()) {
             throw new Error(keyErrors.get(2).apply(position + "::" + offset + " at function " + parent));
         }
         return result;
     }
 
-    private STreeNode parseArgument(int position, int offset, LinkedList<Token> buffer, Token parent) {
+    private STreeNode parseArgument(int position, int offset, LinkedList<Token> buffer, Token parent) throws Error {
         STreeNode result;
-        if( !buffer.isEmpty() && isOperator(buffer.peek().getLexeme())){
+        if (!buffer.isEmpty() && isOperator(buffer.peek().getLexeme())) {
             Token newCore = buffer.pollFirst();
             buffer.add(0, parent);
-            result  = parseOperator(position, offset++, buffer, newCore);
+            result = parseOperator(position, offset++, buffer, newCore);
         } else {
             result = new STreeNode<>(position, TreeNodeType.findByKey(parent.getLexeme().getToken()));
             result.addChild(parent.getValue());

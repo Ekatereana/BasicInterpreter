@@ -1,0 +1,12 @@
+
+30 rem print 'ignored'
+33
+
+
+
+50 print 3: rem 'gggg'
+60 print 'three' : print 1.0 + 3 : end
+70 goto 11. + 18.5 + .5 rem ignored
+10 print "o" ; "n" ; "e" : end
+20 print 'a' : goto 6
+80 print 'a' ; 'm' ; 't'

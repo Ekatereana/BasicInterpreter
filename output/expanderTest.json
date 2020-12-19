@@ -1,0 +1,61 @@
+{
+  "position" : 0,
+  "type" : "root",
+  "children" : [ {
+    "position" : 11,
+    "type" : "print",
+    "children" : [ {
+      "position" : 11,
+      "type" : "sum",
+      "children" : [ {
+        "position" : 11,
+        "type" : "integer",
+        "children" : [ "4" ]
+      }, {
+        "position" : 11,
+        "type" : "decimal",
+        "children" : [ "5.3" ]
+      } ]
+    } ]
+  }, {
+    "position" : 11,
+    "type" : "print",
+    "children" : [ {
+      "position" : 11,
+      "type" : "merge",
+      "children" : [ {
+        "position" : 11,
+        "type" : "string",
+        "children" : [ "\"b\"" ]
+      }, {
+        "position" : 11,
+        "type" : "string",
+        "children" : [ "\"m\"" ]
+      } ]
+    } ]
+  }, {
+    "position" : 13,
+    "type" : "goTo",
+    "children" : [ {
+      "position" : 13,
+      "type" : "integer",
+      "children" : [ "17" ]
+    } ]
+  }, {
+    "position" : 12,
+    "type" : "print",
+    "children" : [ {
+      "position" : 12,
+      "type" : "integer",
+      "children" : [ "12" ]
+    } ]
+  }, {
+    "position" : 17,
+    "type" : "print",
+    "children" : [ {
+      "position" : 17,
+      "type" : "string",
+      "children" : [ "\"on 17\"" ]
+    } ]
+  } ]
+}

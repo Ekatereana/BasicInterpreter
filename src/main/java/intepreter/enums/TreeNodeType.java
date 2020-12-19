@@ -1,21 +1,23 @@
 package intepreter.enums;
 
+import com.fasterxml.jackson.annotation.JsonValue;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 public enum TreeNodeType{
     ROOT("root"),
-    REM("rem", true),
+    REM("rem", false),
     INTEGER("integer", false, true),
-    DECIMAL("double", false, true),
+    DECIMAL("decimal", false, true),
     STRING("string",  false, true),
     CONCAT("merge", ";"),
     PLUS("sum", "+"),
     SPLIT(":"),
     PRINT("print", true),
-    GO_TO("goto", true),
-    END("end",true);
+    GO_TO("goTo", "goto", false),
+    END("end", false);
 
     @Override
     public String toString() {
@@ -24,10 +26,17 @@ public enum TreeNodeType{
                 '}';
     }
 
+    TreeNodeType(String type, String literal, boolean isUnary) {
+        this.type = type;
+        this.literal = literal;
+        this.isUnary = isUnary;
+    }
+
+    @JsonValue
     private String type;
     private String literal;
-    private boolean isUnary;
-    private boolean isType;
+    private boolean isUnary = false;
+    private boolean isType = false;
 
     private static final HashMap<String,TreeNodeType> map;
     static {
@@ -36,7 +45,19 @@ public enum TreeNodeType{
             map.put(v.getLiteral(), v);
         }
     }
+
+    private static final HashMap<String,TreeNodeType> actual;
+    static {
+        actual = new HashMap<String,TreeNodeType>();
+        for (TreeNodeType v : TreeNodeType.values()) {
+            map.put(v.getType(), v);
+        }
+    }
+
     public static TreeNodeType findByKey(String token) {
+        return map.get(token);
+    }
+    public static TreeNodeType findByType(String token) {
         return map.get(token);
     }
 

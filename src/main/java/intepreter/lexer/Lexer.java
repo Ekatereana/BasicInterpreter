@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static intepreter.enums.TokenTypes.*;
@@ -61,7 +62,7 @@ public class Lexer {
             current = getToken(args[i]);
 
             if (current.getLexeme().equals(COMMENT) || current.getLexeme().equals(STRING)) {
-                LexemeResponse lexeme = getString(args, i);
+                LexemeResponse lexeme = getString(args, i, current.getLexeme());
                 current.setValue(lexeme.lexeme);
                 i = lexeme.index - 1;
 
@@ -91,10 +92,16 @@ public class Lexer {
         }
     }
 
-    private LexemeResponse getString(String[] args, int i) {
+    private LexemeResponse getString(String[] args, int i, TokenTypes token) {
         StringBuilder rem = new StringBuilder();
-        String delimiter = args[i].startsWith("\'") ? "\'" : "\"";
-        while (i < args.length && !Pattern.matches(".*\n.*||.*\".*||.*\'.*", args[i])) {
+
+        String delimiter = args[i].startsWith("\'") ? "\'": "\"";
+
+        if (i < args.length && Pattern.matches("\".+[^\"]$|\'.+[^\']$", args[i])) {
+            rem.append(args[i] + " ");
+            i++;
+        }
+        while (i < args.length && !Pattern.matches(".*\n|.*\".*|.*\'.*", args[i])) {
             rem.append(args[i] + " ");
             i++;
         }

@@ -1,117 +1,93 @@
 {
   "position" : 0,
-  "type" : "ROOT",
+  "type" : "root",
   "children" : [ {
     "position" : 30,
-    "type" : "REM",
+    "type" : "rem",
     "children" : [ "rem print 'ignored'" ]
   }, {
+    "position" : 44,
+    "type" : "print",
+    "children" : [ {
+      "position" : 44,
+      "type" : "string",
+      "children" : [ "'jfjfj'" ]
+    } ]
+  }, {
     "position" : 50,
-    "type" : "PRINT",
+    "type" : "print",
     "children" : [ {
       "position" : 50,
-      "type" : "INTEGER",
+      "type" : "integer",
       "children" : [ "3" ]
     } ]
   }, {
     "position" : 50,
-    "type" : "REM",
+    "type" : "rem",
     "children" : [ "rem 'gggg'" ]
   }, {
-    "position" : 40,
-    "type" : "END",
-    "children" : [ "end" ]
-  }, {
     "position" : 60,
-    "type" : "PRINT",
+    "type" : "print",
     "children" : [ {
       "position" : 60,
-      "type" : "STRING",
+      "type" : "string",
       "children" : [ "'three'" ]
     } ]
   }, {
     "position" : 60,
-    "type" : "PRINT",
+    "type" : "print",
     "children" : [ {
       "position" : 60,
-      "type" : "PLUS",
+      "type" : "sum",
       "children" : [ {
         "position" : 60,
-        "type" : "DECIMAL",
+        "type" : "decimal",
         "children" : [ "1.0" ]
       }, {
         "position" : 60,
-        "type" : "INTEGER",
+        "type" : "integer",
         "children" : [ "3" ]
       } ]
     } ]
   }, {
     "position" : 70,
-    "type" : "GO_TO",
+    "type" : "print",
     "children" : [ {
       "position" : 70,
-      "type" : "PLUS",
+      "type" : "sum",
       "children" : [ {
         "position" : 70,
-        "type" : "DECIMAL",
+        "type" : "decimal",
         "children" : [ "11." ]
       }, {
         "position" : 70,
-        "type" : "PLUS",
+        "type" : "sum",
         "children" : [ {
           "position" : 70,
-          "type" : "DECIMAL",
+          "type" : "decimal",
           "children" : [ "18.5" ]
         }, {
           "position" : 70,
-          "type" : "DECIMAL",
+          "type" : "decimal",
           "children" : [ ".5" ]
         } ]
       } ]
     } ]
   }, {
-    "position" : 10,
-    "type" : "PRINT",
+    "position" : 70,
+    "type" : "goTo",
     "children" : [ {
-      "position" : 10,
-      "type" : "CONCAT",
-      "children" : [ {
-        "position" : 10,
-        "type" : "STRING",
-        "children" : [ "\"o\"" ]
-      }, {
-        "position" : 10,
-        "type" : "CONCAT",
-        "children" : [ {
-          "position" : 10,
-          "type" : "STRING",
-          "children" : [ "\"n\"" ]
-        }, {
-          "position" : 10,
-          "type" : "STRING",
-          "children" : [ "\"e\"" ]
-        } ]
-      } ]
+      "position" : 70,
+      "type" : "integer",
+      "children" : [ "77" ]
     } ]
   }, {
     "position" : 20,
-    "type" : "PRINT",
+    "type" : "print",
     "children" : [ {
       "position" : 20,
-      "type" : "STRING",
+      "type" : "string",
       "children" : [ "'a'" ]
     } ]
-  }, {
-    "position" : 20,
-    "type" : "GO_TO",
-    "children" : [ {
-      "position" : 20,
-      "type" : "DECIMAL",
-      "children" : [ "60.0" ]
-    } ]
-  }, {
-    "position" : 20,
-    "type" : "END",
-    "children" : [ "end" ]
   } ]
 }
