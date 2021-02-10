@@ -3,7 +3,6 @@ package intepreter.expander;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import intepreter.STreeNode;
-
 import intepreter.enums.TreeNodeType;
 
 import javax.tools.JavaCompiler;
@@ -67,13 +66,13 @@ public class Expander {
         HashMap<Integer, List<String>> code = new HashMap<>();
         Iterator<STreeNode> iterator = tree.getChildren().listIterator();
         STreeNode<STreeNode> node;
-        while (iterator.hasNext()){
+        while (iterator.hasNext()) {
             node = iterator.next();
-            if (!code.containsKey(getLine( node))) {
-                code.put(getLine( node), new ArrayList<>());
+            if (!code.containsKey(getLine(node))) {
+                code.put(getLine(node), new ArrayList<>());
             }
-            code.get(getLine( node))
-                    .add(expandLine( node, !iterator.hasNext()));
+            code.get(getLine(node))
+                    .add(expandLine(node, !iterator.hasNext()));
         }
         openCode(code, data);
         data.append(END);
@@ -84,7 +83,7 @@ public class Expander {
         compiler.getTask(null, null, null, null, null, fileObjects).
                 call();
         long endCompile = System.nanoTime();
-        System.out.println("Compilation time: " + (int)((endCompile - startCompile)/1000000));
+        System.out.println("Compilation time: " + (int) ((endCompile - startCompile) / 1000000));
         Path temp = Paths.get(System.getProperty("user.dir"));
 
         startCompile = System.nanoTime();
@@ -96,7 +95,7 @@ public class Expander {
         Method method = javaDemoClass.getMethod("main", String[].class);
         method.invoke(null, (Object) new String[0]);
         endCompile = System.nanoTime();
-        System.out.println("Method invocation time: " + (int)((endCompile - startCompile)/1000000));
+        System.out.println("Method invocation time: " + (int) ((endCompile - startCompile) / 1000000));
 
 
     }
@@ -107,12 +106,12 @@ public class Expander {
             data.append(STACKER + ADD + line.getKey() + ", Arrays.asList( new Thread[]{");
             line.getValue().remove(null);
             Iterator it = line.getValue().iterator();
-            while (it.hasNext()){
+            while (it.hasNext()) {
                 data.append(it.next());
             }
             data.append("}));");
         }
-        data.append( STACKER + EXEC + END_FUNCTION);
+        data.append(STACKER + EXEC + END_FUNCTION);
     }
 
     private Integer getLine(STreeNode<STreeNode> node) {
@@ -120,13 +119,14 @@ public class Expander {
     }
 
     private String expandLine(STreeNode<STreeNode> node, boolean isArgument) {
-        if(node.getType().equals(TreeNodeType.REM)){
+        if (node.getType().equals(TreeNodeType.REM)) {
             ignore(node, isArgument);
             return null;
         }
         StringBuilder builder = new StringBuilder();
-        builder.append("\n" + STACKER + node.getType().getType() + SEPARATOR);
         ListIterator<STreeNode> iterator = node.getChildren().listIterator();
+        builder.append("\n" + STACKER + node.getType().getType() +
+                SEPARATOR + node.getPosition() + (iterator.hasNext() ? "," : ""));
         STreeNode child;
         while (iterator.hasNext()) {
             child = iterator.next();
@@ -142,7 +142,7 @@ public class Expander {
             }
 
         }
-        builder.append(isArgument ? END_ARGUMENT  : END_ARGUMENT + ",");
+        builder.append(isArgument ? END_ARGUMENT : END_ARGUMENT + ",");
         return builder.toString();
     }
 

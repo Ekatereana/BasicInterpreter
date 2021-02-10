@@ -10,7 +10,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static intepreter.enums.TokenTypes.*;
@@ -32,15 +31,23 @@ public class Lexer {
                 "^-?([1-9][0-9]*)[\\.]\\d*||^-?([1-9][0-9]*)[\\.]\\d+||\\.\\d*", x), x -> new Token(DOUBLE, x));
         keywords.put(x -> Pattern.matches("\".*\"||\'.*\'||\".*||.*\"||\'*", x), x -> new Token(STRING, x));
         keywords.put(x -> Pattern.matches("rem", x), x -> new Token(COMMENT, x));
-        keywords.put(x -> Pattern.matches("print||goto||end||\\+||\\:||\\;", x), x -> new Token(TokenTypes.findByKey(x), x));
+        keywords.put(x -> Pattern.matches("\\)||\\(||for||in||=||range||print||" +
+                        "goto||end||\\+||\\+=||\\:||\\;||<||>||if||else||then", x),
+                x -> new Token(TokenTypes.findByKey(x), x));
         keywords.put(x -> Pattern.matches(
-                ".*\\+.+||.+\\+.*||" +
+                ".*\\+[^\\=]+||.+\\+[^\\=]*||" +
                         ".*\\:.+||.+\\:.*||" +
-                        ".*\\;.+||.+\\;.*", x), x -> {
-                    buffer.addAll(Arrays.asList(x.split("")));
+                        ".*\\;.+||.+\\;.*||" +
+                        "[^\\+]*=.+||[^\\+]+=.*||" +
+                        ".*[\\(\\)].+||.+[\\(\\)].*||" +
+                        ".*(<|>).+||.+(<|>).*||" +
+                        ".*\\+=.+||.+\\+=.*||"
+                , x), x -> {
+                    buffer.addAll(Arrays.asList(x.split("(?<!\\+(?==))")));
                     return getToken(buffer.poll());
                 }
         );
+        keywords.put(x -> Pattern.matches("\\S+\\w*", x), x -> new Token(VAR, x));
     }
 
     public Lexer() {
@@ -95,13 +102,13 @@ public class Lexer {
     private LexemeResponse getString(String[] args, int i, TokenTypes token) {
         StringBuilder rem = new StringBuilder();
 
-        String delimiter = args[i].startsWith("\'") ? "\'": "\"";
+        String delimiter = args[i].startsWith("\'") ? "\'" : "\"";
 
         if (i < args.length && Pattern.matches("\".+[^\"]$|\'.+[^\']$", args[i])) {
             rem.append(args[i] + " ");
             i++;
         }
-        while (i < args.length && !Pattern.matches(".*\n|.*\".*|.*\'.*", args[i])) {
+        while (i < args.length && !Pattern.matches(".*\n.*|.*\".*|.*\'.*", args[i])) {
             rem.append(args[i] + " ");
             i++;
         }
@@ -154,13 +161,12 @@ public class Lexer {
         for (HashMap.Entry<Predicate<String>, Function<String, Token>> el : keywords.entrySet()) {
             if (el.getKey().test(s)) {
                 result = el.getValue().apply(s);
-                break;
+                return result == null ? new Token(UNKNOWN, s) : result;
             }
 
         }
-        result = result == null ? new Token(UNKNOWN, s) : result;
-//        System.out.println(result.getLexeme());
-        return result;
+
+        return null;
     }
 
 }

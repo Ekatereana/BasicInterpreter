@@ -1,0 +1,189 @@
+{
+  "position" : 0,
+  "type" : "root",
+  "children" : [ {
+    "position" : 9,
+    "type" : "assign",
+    "children" : [ {
+      "position" : 9,
+      "type" : "var",
+      "children" : [ "\"i\"" ]
+    }, {
+      "position" : 10,
+      "type" : "string",
+      "children" : [ "'sting'" ]
+    } ]
+  }, {
+    "position" : 10,
+    "type" : "assign",
+    "children" : [ {
+      "position" : 10,
+      "type" : "var",
+      "children" : [ "\"i\"" ]
+    }, {
+      "position" : 11,
+      "type" : "integer",
+      "children" : [ "4" ]
+    } ]
+  }, {
+    "position" : 11,
+    "type" : "print",
+    "children" : [ {
+      "position" : 11,
+      "type" : "var",
+      "children" : [ "\"i\"" ]
+    } ]
+  }, {
+    "position" : 11,
+    "type" : "forLoop",
+    "children" : [ {
+      "position" : 11,
+      "type" : "in",
+      "children" : [ {
+        "position" : 11,
+        "type" : "var",
+        "children" : [ "\"i\"" ]
+      }, {
+        "position" : 12,
+        "type" : "range",
+        "children" : [ {
+          "position" : 12,
+          "type" : "integer",
+          "children" : [ "3" ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "position" : 12,
+    "type" : "print",
+    "children" : [ {
+      "position" : 12,
+      "type" : "string",
+      "children" : [ "\"Done\"" ]
+    } ]
+  }, {
+    "position" : 13,
+    "type" : "print",
+    "children" : [ {
+      "position" : 13,
+      "type" : "string",
+      "children" : [ "\"Even touched next line\"" ]
+    } ]
+  }, {
+    "position" : 14,
+    "type" : "end",
+    "children" : [ ]
+  }, {
+    "position" : 18,
+    "type" : "print",
+    "children" : [ {
+      "position" : 18,
+      "type" : "string",
+      "children" : [ "\"and I am get there even after end statement\"" ]
+    } ]
+  }, {
+    "position" : 19,
+    "type" : "assign",
+    "children" : [ {
+      "position" : 19,
+      "type" : "var",
+      "children" : [ "\"i\"" ]
+    }, {
+      "position" : 20,
+      "type" : "var",
+      "children" : [ "\"0\"" ]
+    } ]
+  }, {
+    "position" : 21,
+    "type" : "print",
+    "children" : [ {
+      "position" : 21,
+      "type" : "var",
+      "children" : [ "\"i\"" ]
+    } ]
+  }, {
+    "position" : 22,
+    "type" : "end",
+    "children" : [ ]
+  }, {
+    "position" : 23,
+    "type" : "assign",
+    "children" : [ {
+      "position" : 23,
+      "type" : "var",
+      "children" : [ "\"i\"" ]
+    }, {
+      "position" : 24,
+      "type" : "integer",
+      "children" : [ "6" ]
+    } ]
+  }, {
+    "position" : 24,
+    "type" : "rem",
+    "children" : [ "rem else : print \"k\"" ]
+  }, {
+    "position" : 25,
+    "type" : "forLoop",
+    "children" : [ {
+      "position" : 25,
+      "type" : "in",
+      "children" : [ {
+        "position" : 25,
+        "type" : "var",
+        "children" : [ "\"i\"" ]
+      }, {
+        "position" : 26,
+        "type" : "range",
+        "children" : [ {
+          "position" : 26,
+          "type" : "integer",
+          "children" : [ "7" ]
+        } ]
+      } ]
+    } ]
+  }, {
+    "position" : 30,
+    "type" : "ifCase",
+    "children" : [ {
+      "position" : 30,
+      "type" : "lower",
+      "children" : [ {
+        "position" : 30,
+        "type" : "var",
+        "children" : [ "\"i\"" ]
+      }, {
+        "position" : 31,
+        "type" : "integer",
+        "children" : [ "7" ]
+      } ]
+    } ]
+  }, {
+    "position" : 30,
+    "type" : "print",
+    "children" : [ {
+      "position" : 30,
+      "type" : "string",
+      "children" : [ "\"smaller than 7\"" ]
+    } ]
+  }, {
+    "position" : 30,
+    "type" : "elseCase",
+    "children" : [ ]
+  }, {
+    "position" : 30,
+    "type" : "print",
+    "children" : [ {
+      "position" : 30,
+      "type" : "string",
+      "children" : [ "\"large than 7\"" ]
+    } ]
+  }, {
+    "position" : 61,
+    "type" : "end",
+    "children" : [ ]
+  }, {
+    "position" : 62,
+    "type" : "end",
+    "children" : [ ]
+  } ]
+}

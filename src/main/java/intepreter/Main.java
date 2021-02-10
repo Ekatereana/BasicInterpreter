@@ -16,9 +16,10 @@ public class Main {
     public static void main(String[] args) {
         Lexer l = new Lexer();
 
-        String[] files = args.length > 0 ? args : new String[]{"testData/LoopTest.txt}"};
+        String[] files = args.length > 0 ? args : new String[]{"testData/LoopTest.txt"};
 //                new String[]{"testData/test.txt", "testData/test2.txt", "testData/test3.txt"};
         long startTime = System.nanoTime();
+        String filename;
         long let;
         long end;
         try {
@@ -27,7 +28,8 @@ public class Main {
             for (String el : files) {
                 let = System.nanoTime();
                 List<ArrayList<Token>> tokens = l.iterateFile(el);
-                expander.expand(parser.parse(el, tokens));
+                filename = parser.parse(el, tokens);
+                expander.expand(filename);
                 end = System.nanoTime();
                 System.out.println("Time for " + el + ": " +  (end - let)/ 1000000);
             }

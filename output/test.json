@@ -74,12 +74,28 @@
       } ]
     } ]
   }, {
-    "position" : 70,
-    "type" : "goTo",
+    "position" : 10,
+    "type" : "print",
     "children" : [ {
-      "position" : 70,
-      "type" : "integer",
-      "children" : [ "77" ]
+      "position" : 10,
+      "type" : "merge",
+      "children" : [ {
+        "position" : 10,
+        "type" : "string",
+        "children" : [ "\"o\"" ]
+      }, {
+        "position" : 10,
+        "type" : "merge",
+        "children" : [ {
+          "position" : 10,
+          "type" : "string",
+          "children" : [ "\"n\"" ]
+        }, {
+          "position" : 10,
+          "type" : "string",
+          "children" : [ "\"e\"" ]
+        } ]
+      } ]
     } ]
   }, {
     "position" : 20,

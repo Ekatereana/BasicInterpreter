@@ -5,5 +5,5 @@
 50 print 3 : rem 'gggg'
 60 print 'three' : print 1.0 + 3
 70 print 11. + 18.5 + .5 rem ignored
-10 print "o" ; "n" ; "e" : goto 77
+10 print "o" ; "n" ; "e"
 20 print 'a'

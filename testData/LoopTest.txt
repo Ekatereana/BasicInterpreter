@@ -1,1 +1,16 @@
-10 i
+9 i = 'sting'
+10 i = 4
+11 print i : for i in range 3
+12 print "Done"
+13 print "Even touched next line"
+14 end
+18 print "and I am get there even after end statement"
+19 i = 0
+21 print i
+22 end
+23 i = 6
+24 rem else : print "k"
+25 for i in range 7
+30 if i < 7 : print "smaller than 7" : else : print "large than 7"
+61 end
+62 end
